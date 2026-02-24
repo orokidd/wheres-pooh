@@ -2,10 +2,10 @@ const prisma = require("../config/prisma");
 const API_KEY = process.env.API_KEY;
 
 const characters = {
-	Aladdin: { xMin: 320, xMax: 380, yMin: 180, yMax: 260 },
-	Merlin: { xMin: 500, xMax: 560, yMin: 300, yMax: 370 },
-	Rapunzel: { xMin: 320, xMax: 380, yMin: 180, yMax: 260 },
-	Pooh: { xMin: 500, xMax: 560, yMin: 300, yMax: 370 },
+	Aladdin: { xMin: 782, xMax: 843, yMin: 342, yMax: 475 },
+	Zorro: { xMin: 70, xMax: 116, yMin: 1131, yMax: 1209 },
+	Rapunzel: { xMin: 13, xMax: 68, yMin: 618, yMax: 726 },
+	Pooh: { xMin: 1190, xMax: 1236, yMin: 800, yMax: 866 },
 };
 
 function checkUserInput(req, res) {
@@ -21,7 +21,7 @@ function checkUserInput(req, res) {
 
 	const isFound = x >= target.xMin && x <= target.xMax && y >= target.yMin && y <= target.yMax;
 
-	res.json({ sucess: isFound, character });
+	res.json({ found: isFound });
 }
 
 async function addToLeaderboard(req, res) {

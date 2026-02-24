@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import siteLogo from "./assets/site-icon.jpeg";
 import puzzleImage from "./assets/main-img.jpg";
@@ -14,7 +14,9 @@ type Seleciton = {
 	character: string;
 };
 
-const characterNames: string[] = ["Aladdin", "Merlin", "Rapunzel", "Pooh"];
+const characterNames: string[] = ["Aladdin", "Zorro", "Rapunzel", "Pooh"];
+
+const API_KEY = import.meta.env.VITE_API_URL;
 
 function App() {
 	const [welcomePage, setWelcomePage] = useState<boolean>(true);
@@ -26,7 +28,7 @@ function App() {
 			found: false,
 		},
 		{
-			name: "Merlin",
+			name: "Zorro",
 			found: false,
 		},
 		{
@@ -47,13 +49,9 @@ function App() {
 
 	function handleImageClick(e: React.MouseEvent<HTMLImageElement>) {
 		const imageInfo = e.currentTarget.getBoundingClientRect();
-		const imageLeftGap = imageInfo.left;
-		const imageTopGap = imageInfo.top;
-		const currentMouseCoordinatesX = e.clientX;
-		const currentMouseCoordinatesY = e.clientY;
 
-		const x = currentMouseCoordinatesX - imageLeftGap;
-		const y = currentMouseCoordinatesY - imageTopGap;
+		const x = e.clientX - imageInfo.left;
+		const y = e.clientY - imageInfo.top;
 
 		setCurrentSelection((prev) => {
 			return { ...prev, x, y };
@@ -74,18 +72,44 @@ function App() {
 			character: selectedCharacter,
 		};
 
-		setCurrentSelection(updatedSelection);
-
 		console.log(updatedSelection);
 
-		//   const result: boolean = await checkCharacter(updatedSelection);
+		const result = await checkSelection(updatedSelection);
+
+		if (!result) return;
+
+		markCharacterAsFound(selectedCharacter);
+	}
+
+	function markCharacterAsFound(characterName: string) {
+		setGameStatus((prev) => prev.map((char) => (char.name === characterName ? { ...char, found: true } : char)));
+	}
+
+	async function checkSelection(selection: Seleciton) {
+		const res = await fetch(`http://localhost:5000/api/game/check`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				apiKey: API_KEY,
+			},
+			body: JSON.stringify(selection),
+		});
+
+		if (!res.ok) throw new Error("Failed to request.");
+		const data = await res.json();
+		const { found } = data;
+
+		return found; // true or false
 	}
 
 	if (welcomePage === true)
 		return (
 			<div className="welcome">
 				<p>Where's Pooh</p>
-				<button onClick={() => { setWelcomePage(false) }}>
+				<button
+					onClick={() => {
+						setWelcomePage(false);
+					}}>
 					Start Game
 				</button>
 			</div>
