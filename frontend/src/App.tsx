@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import siteLogo from "./assets/site-icon.jpeg";
 import puzzleImage from "./assets/main-img.jpg";
@@ -8,7 +8,7 @@ type Status = {
 	found: boolean;
 };
 
-type Seleciton = {
+type Selection = {
 	x: number;
 	y: number;
 	character: string;
@@ -16,7 +16,7 @@ type Seleciton = {
 
 const characterNames: string[] = ["Aladdin", "Zorro", "Rapunzel", "Pooh"];
 
-const API_KEY = import.meta.env.VITE_API_URL;
+const API_KEY = import.meta.env.VITE_API_KEY
 
 function App() {
 	const [welcomePage, setWelcomePage] = useState<boolean>(true);
@@ -41,7 +41,7 @@ function App() {
 		},
 	]);
 
-	const [currentSelection, setCurrentSelection] = useState<Seleciton>({
+	const [currentSelection, setCurrentSelection] = useState<Selection>({
 		x: 0,
 		y: 0,
 		character: "",
@@ -51,7 +51,7 @@ function App() {
 		const imageInfo = e.currentTarget.getBoundingClientRect();
 
 		const x = e.clientX - imageInfo.left;
-		const y = e.clientY - imageInfo.top;
+		const y = Math.ceil(e.clientY - imageInfo.top) ;
 
 		setCurrentSelection((prev) => {
 			return { ...prev, x, y };
@@ -63,9 +63,9 @@ function App() {
 	async function handleSelectionClick(e: React.MouseEvent) {
 		const selectedCharacter = e.currentTarget.id;
 
-		setCurrentSelection((prev) => {
-			return { ...prev, character: selectedCharacter };
-		});
+		// setCurrentSelection((prev) => {
+		// 	return { ...prev, character: selectedCharacter };
+		// });
 
 		const updatedSelection = {
 			...currentSelection,
@@ -76,21 +76,23 @@ function App() {
 
 		const result = await checkSelection(updatedSelection);
 
-		if (!result) return;
+		if (result) {
+			markCharacterAsFound(selectedCharacter);
+		};
 
-		markCharacterAsFound(selectedCharacter);
+		setCharacterSelectionCard(false);
 	}
 
 	function markCharacterAsFound(characterName: string) {
 		setGameStatus((prev) => prev.map((char) => (char.name === characterName ? { ...char, found: true } : char)));
 	}
 
-	async function checkSelection(selection: Seleciton) {
-		const res = await fetch(`http://localhost:5000/api/game/check`, {
+	async function checkSelection(selection: Selection) {
+		const res = await fetch(`http://localhost:3000/api/check`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
-				apiKey: API_KEY,
+				"X-API-Key": API_KEY,
 			},
 			body: JSON.stringify(selection),
 		});
@@ -101,6 +103,16 @@ function App() {
 
 		return found; // true or false
 	}
+
+	useEffect(() => {
+		const charFound = gameStatus.filter(item => item.found === true)
+		
+		console.log(charFound)
+
+		if (charFound.length === 4) {
+			console.log("Game Over: All characters has been found")
+		}
+	}, [gameStatus])
 
 	if (welcomePage === true)
 		return (
@@ -143,7 +155,10 @@ function App() {
 			{characterSelectionCard ? (
 				<div className="character-seleciton">
 					<div className="close-btn">
-						<button onClick={() => setCharacterSelectionCard(false)}>X</button>
+						<button onClick={() => {
+									setCharacterSelectionCard(false);
+									setCurrentSelection({ x: 0, y: 0, character: "" });
+								}}>X</button>
 					</div>
 					<div className="options">
 						{characterNames.map((char, index) => (

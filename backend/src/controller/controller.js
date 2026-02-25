@@ -10,7 +10,7 @@ const characters = {
 
 function checkUserInput(req, res) {
 	const { x, y, character } = req.body;
-	const apiKey = req.headers.apiKey;
+	const apiKey = req.headers['x-api-key'];
 
 	if (apiKey !== API_KEY) {
 		return res.status(401).json({ success: false, message: "Unauthorized" });
