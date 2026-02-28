@@ -26,7 +26,7 @@ function checkUserInput(req, res) {
 
 async function addToLeaderboard(req, res) {
 	const { username, time } = req.body;
-	const apiKey = req.headers.apiKey;
+	const apiKey = req.headers['x-api-key'];
 
 	if (apiKey !== API_KEY) {
 		return res.status(401).json({ success: false, message: "Unauthorized" });
@@ -46,7 +46,18 @@ async function addToLeaderboard(req, res) {
 	return res.status(200).json({ success: true, message: "Add data success" });
 }
 
+async function getLeaderboard(_req, res) {
+	const leaderboard = await prisma.leaderboard.findMany({
+		orderBy: {
+			time: "asc"
+		}
+	})
+
+	return res.status(200).json({ leaderboard });
+}
+
 module.exports = {
 	checkUserInput,
 	addToLeaderboard,
+	getLeaderboard
 };
