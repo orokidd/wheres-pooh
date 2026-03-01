@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react"
-import { Link } from "react-router-dom"
-import siteLogo from "./assets/site-icon.jpeg"
 import puzzleImage from "./assets/main-img.jpg"
+import Welcome from "./components/Welcome"
+import GameOver from "./components/GameOver"
+import Timer from "./components/Timer"
+import Header from "./components/Header"
 
 type Status = {
 	name: string
@@ -14,35 +16,15 @@ type Selection = {
 	character: string
 }
 
-type TimeResult = {
-	username: string
-	time: number // time in seconds
-}
-
-type Leaderboard = [
-	{
-		username: string
-		time: number
-	},
-]
-
 const API_KEY = import.meta.env.VITE_API_KEY
 
 function App() {
 	const [welcomePage, setWelcomePage] = useState<boolean>(true)
 	const [viewSelectionCard, setViewSelectionCard] = useState<boolean>(false)
 	const [gameOver, setGameOver] = useState<boolean>(false)
-	const [username, setUsername] = useState<string>("")
-	const [leaderboard, setLeaderboard] = useState<Leaderboard>([
-		{
-			username: "dono",
-			time: 12,
-		},
-	])
 
 	const [time, setTime] = useState<number>(0)
 	const [isRunning, setIsRunning] = useState<boolean>(false)
-	const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
 	const [gameStatus, setGameStatus] = useState<Status[]>([
 		{
@@ -121,62 +103,13 @@ function App() {
 
 		return found // true or false
 	}
-
-	// Format time function (MM:SS format)
-	function formatTime(totalSeconds: number): string {
-		const minutes = Math.floor(totalSeconds / 60)
-		const seconds = totalSeconds % 60
-		return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`
-	}
-
-	// Submit score to backend
-	async function handleSubmitScore() {
-		if (!username.trim()) {
-			alert("Please enter a username")
-			return
-		}
-
-		setIsSubmitting(true)
-
-		try {
-			const timeResult: TimeResult = {
-				username: username.trim(),
-				time: time,
-			}
-
-			const response = await fetch(`http://localhost:3000/api/new/scores`, {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-					"X-API-Key": API_KEY,
-				},
-				body: JSON.stringify(timeResult),
-			})
-
-			if (!response.ok) {
-				throw new Error("Failed to submit score")
-			}
-
-			alert("Score submitted successfully!")
-		} catch (error) {
-			console.error("Error submitting score:", error)
-			alert("Failed to submit score. Please try again.")
-		} finally {
-			setIsSubmitting(false)
-		}
-	}
+	
 
 	function resetGame() {
-		setGameStatus([
-			{ name: "Aladdin", found: false },
-			{ name: "Zorro", found: false },
-			{ name: "Rapunzel", found: false },
-			{ name: "Pooh", found: false },
-		])
+		setGameStatus((prev) => prev.map((char) => ({ ...char, found: false })))
 		setTime(0)
 		setGameOver(false)
 		setWelcomePage(true)
-		setUsername("")
 	}
 
 	// prevtime + 1 every 1000ms
@@ -194,123 +127,32 @@ function App() {
 		}
 	}, [isRunning])
 
-	// start timer when game starts
-	useEffect(() => {
-		if (!welcomePage && !gameOver) {
-			setIsRunning(true)
-		}
-	}, [welcomePage, gameOver])
-
 	// check for game completion
 	useEffect(() => {
 		const charFound = gameStatus.filter((item) => item.found === true)
 
 		if (charFound.length === 4) {
 			console.log("Game Over: All characters has been found")
+			// eslint-disable-next-line react-hooks/set-state-in-effect
 			setIsRunning(false) // Stop the timer
 			setGameOver(true)
 		}
 	}, [gameStatus])
 
-	useEffect(() => {
-		async function loadLeaderboard() {
-			const res = await fetch(`http://localhost:3000/api/scores`, {
-				method: "GET",
-				headers: {
-					"Content-Type": "application/json",
-					"X-API-Key": API_KEY,
-				},
-			})
-
-			if (!res.ok) throw new Error("Failed to request.")
-			const data = await res.json()
-			const { leaderboard } = data
-
-			setLeaderboard(leaderboard)
-		}
-
-		loadLeaderboard()
-	})
-
 	if (welcomePage === true)
 		return (
-			<div className="welcome">
-				<p>Where's Pooh</p>
-				<button
-					onClick={() => {
-						setWelcomePage(false)
-					}}>
-					Start Game
-				</button>
-			</div>
+			<Welcome setWelcomePage={setWelcomePage} setIsRunning={setIsRunning} />
 		)
 
 	if (gameOver === true)
 		return (
-			<div className="game-over">
-				<div className="text">
-					<p>Game Over</p>
-					<p>You have found all the characters!</p>
-					<p className="final-time">Your time: {formatTime(time)}</p>
-				</div>
-
-				<div className="username-input">
-					<p>Enter your username to save your score</p>
-					<input type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username" disabled={isSubmitting} />
-					<button onClick={handleSubmitScore} disabled={isSubmitting || !username.trim()}>
-						{isSubmitting ? "Submitting..." : "Submit Score"}
-					</button>
-					<button onClick={resetGame} style={{ marginLeft: "10px" }}>
-						Play Again
-					</button>
-				</div>
-			</div>
+			<GameOver time={time} resetGame={resetGame}/>
 		)
 
 	return (
 		<>
-			<header>
-				<div className="site-logo">
-					<Link to="/">
-						<img src={siteLogo} alt="Site logo" />
-					</Link>
-				</div>
-
-				<div className="site-pages">
-					<Link to={"/leaderboard"}>Leaderboard</Link>
-				</div>
-
-				<div className="leaderboard">
-					{leaderboard.map((user, index) => (
-						<div key={index}>
-							<p>{user.username}</p>
-							<p>{user.time}s</p>
-						</div>
-					))}
-				</div>
-			</header>
-
-			<section className="game-instruction">
-				<h1>Where's Pooh?</h1>
-				<p>In order to finish the game, you have to find Winnie the Pooh and all his friends.</p>
-			</section>
-
-			{/* Timer Display */}
-			<div
-				className="timer-display"
-				style={{
-					position: "fixed",
-					top: "20px",
-					right: "20px",
-					background: "#333",
-					color: "white",
-					padding: "10px 20px",
-					borderRadius: "5px",
-					fontSize: "24px",
-					fontWeight: "bold",
-				}}>
-				⏱️ {formatTime(time)}
-			</div>
+			<Header />
+			<Timer time={time}/>
 
 			<div className="game-status">
 				<h3>Characters to find:</h3>
