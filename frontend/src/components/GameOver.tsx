@@ -1,11 +1,7 @@
 import { useState } from "react"
 import formatTime from "../utils"
 import { apiSubmitScore } from "../utils/api"
-
-type TimeResult = {
-	username: string
-	time: number // time in seconds
-}
+import type { TimeResult } from "../utils/types"
 
 type GameOverProps = {
 	time: number

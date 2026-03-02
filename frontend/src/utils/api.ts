@@ -1,16 +1,7 @@
 const API_KEY = import.meta.env.VITE_API_KEY
 const api = "http://localhost:3000/api"
 
-type Selection = {
-	x: number
-	y: number
-	character: string
-}
-
-type TimeResult = {
-	username: string
-	time: number // time in seconds
-}
+import type { Selection, TimeResult } from "../utils/types"
 
 export async function apiCheckSelection(selection: Selection) {
 	const res = await fetch(`${api}/check`, {
@@ -46,7 +37,7 @@ export async function apiLoadLeaderboard() {
 }
 
 export async function apiSubmitScore(result: TimeResult) {
-	const res = await fetch(`http://localhost:3000/api/new/scores`, {
+	const res = await fetch(`${api}/new/scores`, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",

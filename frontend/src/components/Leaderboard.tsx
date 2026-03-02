@@ -27,7 +27,7 @@ export default function Leaderboard() {
 		}
 
 		loadLeaderboard()
-	})
+	}, [])
 
 	return (
 		<div className="leaderboard-container">

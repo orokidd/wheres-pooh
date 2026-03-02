@@ -1,7 +1,4 @@
-type Status = {
-	name: string
-	found: boolean
-}
+import type { Status } from "../utils/types"
 
 export default function GameStatus({ status }: { status: Status[] }) {
 	return (

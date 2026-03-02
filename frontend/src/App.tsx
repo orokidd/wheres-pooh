@@ -1,22 +1,16 @@
 import React, { useEffect, useState } from "react"
-import puzzleImage from "./assets/main-img.jpg"
+import type { Selection, Status } from "./utils/types"
+
 import Welcome from "./components/Welcome"
 import GameOver from "./components/GameOver"
 import Timer from "./components/Timer"
 import Header from "./components/Header"
 import GameStatus from "./components/GameStatus"
+import GameImage from "./components/GameImage"
+import SelectionCard from "./components/SelectionCard"
 import { apiCheckSelection } from "./utils/api"
 
-type Status = {
-	name: string
-	found: boolean
-}
-
-type Selection = {
-	x: number
-	y: number
-	character: string
-}
+const CHARACTERS = ["Aladdin", "Zorro", "Rapunzel", "Pooh"]
 
 function App() {
 	const [welcomePage, setWelcomePage] = useState<boolean>(true)
@@ -26,24 +20,9 @@ function App() {
 	const [time, setTime] = useState<number>(0)
 	const [isRunning, setIsRunning] = useState<boolean>(false)
 
-	const [gameStatus, setGameStatus] = useState<Status[]>([
-		{
-			name: "Aladdin",
-			found: false,
-		},
-		{
-			name: "Zorro",
-			found: false,
-		},
-		{
-			name: "Rapunzel",
-			found: false,
-		},
-		{
-			name: "Pooh",
-			found: false,
-		},
-	])
+	const [gameStatus, setGameStatus] = useState<Status[]>(
+		CHARACTERS.map((char) => ({ name: char, found: false }))
+	)
 
 	const [currentSelection, setCurrentSelection] = useState<Selection>({
 		x: 0,
@@ -127,83 +106,25 @@ function App() {
 		}
 	}, [gameStatus])
 
-	if (welcomePage === true)
-		return (
-			<Welcome setWelcomePage={setWelcomePage} setIsRunning={setIsRunning} />
-		)
+	if (welcomePage === true) return <Welcome setWelcomePage={setWelcomePage} setIsRunning={setIsRunning} />
 
-	if (gameOver === true)
-		return (
-			<GameOver time={time} resetGame={resetGame}/>
-		)
+	if (gameOver === true) return <GameOver time={time} resetGame={resetGame} />
 
 	return (
 		<>
 			<Header />
-			<Timer time={time}/>
-			<GameStatus status={gameStatus}/>
-
-			<main>
-				<div className="image-container" style={{ position: "relative" }}>
-					<img src={puzzleImage} alt="Puzzle Image" onClick={handleImageClick} />
-
-					{viewSelectionCard && (
-						<div
-							className="character-selection" // Fixed spelling
-							style={{
-								position: "absolute",
-								left: currentSelection.x,
-								top: currentSelection.y,
-								backgroundColor: "white",
-								border: "1px solid black",
-								padding: "10px",
-								zIndex: 1000,
-								borderRadius: "5px",
-								boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
-							}}>
-							<div className="close-btn" style={{ textAlign: "right" }}>
-								<button
-									onClick={() => {
-										setViewSelectionCard(false)
-										setCurrentSelection({ x: 0, y: 0, character: "" })
-									}}
-									style={{
-										border: "none",
-										background: "none",
-										cursor: "pointer",
-										fontSize: "16px",
-										fontWeight: "bold",
-									}}>
-									✕
-								</button>
-							</div>
-							<div className="options">
-								{gameStatus.map((char) => (
-									<button
-										value={char.name}
-										id={char.name}
-										onClick={handleSelectionClick}
-										key={char.name}
-										disabled={char.found}
-										style={{
-											display: "block",
-											width: "100%",
-											margin: "5px 0",
-											padding: "5px",
-											cursor: char.found ? "not-allowed" : "pointer",
-											opacity: char.found ? 0.5 : 1,
-											backgroundColor: "#f0f0f0",
-											border: "1px solid #ccc",
-											borderRadius: "3px",
-										}}>
-										{char.name}
-									</button>
-								))}
-							</div>
-						</div>
-					)}
-				</div>
-			</main>
+			<Timer time={time} />
+			<GameStatus status={gameStatus} />
+			<GameImage imageClick={handleImageClick}>
+				<SelectionCard
+					viewSelectionCard={viewSelectionCard}
+					currentSelection={currentSelection}
+					setViewSelectionCard={setViewSelectionCard}
+					setCurrentSelection={setCurrentSelection}
+					gameStatus={gameStatus}
+					handleSelectionClick={handleSelectionClick}
+				/>
+			</GameImage>
 		</>
 	)
 }
