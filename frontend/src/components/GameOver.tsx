@@ -1,7 +1,6 @@
 import { useState } from "react"
 import formatTime from "../utils"
-
-const API_KEY = import.meta.env.VITE_API_KEY
+import { apiSubmitScore } from "../utils/api"
 
 type TimeResult = {
 	username: string
@@ -31,16 +30,9 @@ export default function GameOver({ time, resetGame }: GameOverProps) {
 				time: time,
 			}
 
-			const response = await fetch(`http://localhost:3000/api/new/scores`, {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-					"X-API-Key": API_KEY,
-				},
-				body: JSON.stringify(timeResult),
-			})
+			const result = await apiSubmitScore(timeResult)
 
-			if (!response.ok) {
+			if (!result) {
 				throw new Error("Failed to submit score")
 			}
 

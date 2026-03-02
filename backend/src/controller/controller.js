@@ -36,6 +36,16 @@ async function addToLeaderboard(req, res) {
 		return res.status(400).json({ success: false, message: "Invalid username or time" });
 	}
 
+	const usernameExist = await prisma.leaderboard.findFirst({
+		where: {
+			username: username
+		}
+	})
+
+	if (usernameExist) {
+		return res.status(400).json({ success: false, message: "Username already exist" });
+	}
+
 	await prisma.leaderboard.create({
 		data: {
 			username,

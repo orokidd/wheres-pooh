@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react"
-
-const API_KEY = import.meta.env.VITE_API_KEY
+import { apiLoadLeaderboard } from "../utils/api"
 
 type Leaderboard = {
 	username: string
@@ -22,17 +21,7 @@ export default function Leaderboard() {
 
 	useEffect(() => {
 		async function loadLeaderboard() {
-			const res = await fetch(`http://localhost:3000/api/scores`, {
-				method: "GET",
-				headers: {
-					"Content-Type": "application/json",
-					"X-API-Key": API_KEY,
-				},
-			})
-
-			if (!res.ok) throw new Error("Failed to request.")
-			const data = await res.json()
-			const { leaderboard } = data
+			const leaderboard = await apiLoadLeaderboard()
 
 			setLeaderboard(leaderboard)
 		}

@@ -4,6 +4,7 @@ import Welcome from "./components/Welcome"
 import GameOver from "./components/GameOver"
 import Timer from "./components/Timer"
 import Header from "./components/Header"
+import { apiCheckSelection } from "./utils/api"
 
 type Status = {
 	name: string
@@ -15,8 +16,6 @@ type Selection = {
 	y: number
 	character: string
 }
-
-const API_KEY = import.meta.env.VITE_API_KEY
 
 function App() {
 	const [welcomePage, setWelcomePage] = useState<boolean>(true)
@@ -55,7 +54,7 @@ function App() {
 		const imageInfo = e.currentTarget.getBoundingClientRect()
 
 		const x = e.clientX - imageInfo.left
-		const y = Math.ceil(e.clientY - imageInfo.top)
+		const y = e.clientY - imageInfo.top
 
 		setCurrentSelection((prev) => {
 			return { ...prev, x, y }
@@ -83,27 +82,15 @@ function App() {
 		setViewSelectionCard(false)
 	}
 
+	async function checkSelection(selection: Selection) {
+		const result = await apiCheckSelection(selection)
+
+		return result // true or false
+	}
+
 	function markCharacterAsFound(characterName: string) {
 		setGameStatus((prev) => prev.map((char) => (char.name === characterName ? { ...char, found: true } : char)))
 	}
-
-	async function checkSelection(selection: Selection) {
-		const res = await fetch(`http://localhost:3000/api/check`, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-				"X-API-Key": API_KEY,
-			},
-			body: JSON.stringify(selection),
-		})
-
-		if (!res.ok) throw new Error("Failed to request.")
-		const data = await res.json()
-		const { found } = data
-
-		return found // true or false
-	}
-	
 
 	function resetGame() {
 		setGameStatus((prev) => prev.map((char) => ({ ...char, found: false })))
@@ -112,7 +99,7 @@ function App() {
 		setWelcomePage(true)
 	}
 
-	// prevtime + 1 every 1000ms
+	// increment every 1000ms
 	useEffect(() => {
 		let intervalId: number | undefined
 
@@ -134,7 +121,7 @@ function App() {
 		if (charFound.length === 4) {
 			console.log("Game Over: All characters has been found")
 			// eslint-disable-next-line react-hooks/set-state-in-effect
-			setIsRunning(false) // Stop the timer
+			setIsRunning(false)
 			setGameOver(true)
 		}
 	}, [gameStatus])
@@ -205,7 +192,7 @@ function App() {
 										value={char.name}
 										id={char.name}
 										onClick={handleSelectionClick}
-										key={char.name} // Fixed: using name as key instead of index
+										key={char.name}
 										disabled={char.found}
 										style={{
 											display: "block",
@@ -218,7 +205,7 @@ function App() {
 											border: "1px solid #ccc",
 											borderRadius: "3px",
 										}}>
-										{char.name} {char.found ? "(Found)" : ""}
+										{char.name}
 									</button>
 								))}
 							</div>
