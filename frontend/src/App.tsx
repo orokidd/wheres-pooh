@@ -4,6 +4,7 @@ import Welcome from "./components/Welcome"
 import GameOver from "./components/GameOver"
 import Timer from "./components/Timer"
 import Header from "./components/Header"
+import GameStatus from "./components/GameStatus"
 import { apiCheckSelection } from "./utils/api"
 
 type Status = {
@@ -140,17 +141,7 @@ function App() {
 		<>
 			<Header />
 			<Timer time={time}/>
-
-			<div className="game-status">
-				<h3>Characters to find:</h3>
-				<ul>
-					{gameStatus.map((char) => (
-						<li key={char.name} style={{ textDecoration: char.found ? "line-through" : "none" }}>
-							{char.name} {char.found ? "✓" : ""}
-						</li>
-					))}
-				</ul>
-			</div>
+			<GameStatus status={gameStatus}/>
 
 			<main>
 				<div className="image-container" style={{ position: "relative" }}>
