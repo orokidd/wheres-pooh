@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { apiLoadLeaderboard } from "../utils/api"
-import styles from '../styles/Leaderboard.module.css'
+import styles from "../styles/Leaderboard.module.css"
 
 type Leaderboard = {
 	username: string
@@ -9,6 +9,7 @@ type Leaderboard = {
 
 export default function Leaderboard() {
 	const [showLeaderboard, setShowLeaderboard] = useState<boolean>(false)
+	const [loading, setLoading] = useState<boolean>(true)
 	const [leaderboard, setLeaderboard] = useState<Leaderboard[]>([
 		{
 			username: "dono",
@@ -25,6 +26,7 @@ export default function Leaderboard() {
 			const leaderboard = await apiLoadLeaderboard()
 
 			setLeaderboard(leaderboard)
+			setLoading(false)
 		}
 
 		loadLeaderboard()
@@ -33,16 +35,22 @@ export default function Leaderboard() {
 	return (
 		<div className={styles.container}>
 			<div>
-				<button onClick={showButton} className={styles.showButton}>Leaderboard</button>
+				<button onClick={showButton} className={styles.showButton}>
+					Leaderboard
+				</button>
 			</div>
 
 			<div className={`${styles.leaderboard} ${showLeaderboard ? styles.shown : styles.hidden}`}>
-				{leaderboard.map((user, index) => (
-					<div key={index} className={styles.player}>
-						<p>{user.username}</p>
-						<p>{user.time}s</p>
-					</div>
-				))}
+				{loading ? (
+					<p>loading...</p>
+				) : (
+					leaderboard.map((user, index) => (
+						<div key={index} className={styles.player}>
+							<p>{user.username}</p>
+							<p>{user.time}s</p>
+						</div>
+					))
+				)}
 			</div>
 		</div>
 	)
