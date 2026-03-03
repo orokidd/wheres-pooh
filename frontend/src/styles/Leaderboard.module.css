@@ -1,0 +1,38 @@
+.container {
+    position: relative;
+}
+
+.showButton {
+    cursor: pointer;
+    color: var(--fg);
+}
+
+.leaderboard {
+    position: absolute;
+    top: 30px;
+    left: 0;
+    width: 300%;
+    background-color: var(--bg-alt);
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    pointer-events: none;
+    transition: all 0.3s ease;
+    color: var(--fg);
+    z-index: 10;
+}
+
+.shown {
+    opacity: 1;
+}
+
+.hidden {
+    opacity: 0;
+}
+
+.player {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}

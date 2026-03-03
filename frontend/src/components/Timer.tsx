@@ -1,21 +1,6 @@
 import formatTime from "../utils"
+import styles from "../styles/Timer.module.css"
 
 export default function Timer({ time }: { time: number }) {
-	return (
-		<div
-			className="timer-display"
-			style={{
-				position: "fixed",
-				top: "20px",
-				right: "20px",
-				background: "#333",
-				color: "white",
-				padding: "10px 20px",
-				borderRadius: "5px",
-				fontSize: "24px",
-				fontWeight: "bold",
-			}}>
-			⏱️ {formatTime(time)}
-		</div>
-	)
+	return <div className={styles.timer}>{formatTime(time)}</div>
 }

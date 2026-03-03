@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { apiLoadLeaderboard } from "../utils/api"
+import styles from '../styles/Leaderboard.module.css'
 
 type Leaderboard = {
 	username: string
@@ -30,14 +31,14 @@ export default function Leaderboard() {
 	}, [])
 
 	return (
-		<div className="leaderboard-container">
-			<div className="show-button">
-				<button onClick={showButton}>Leaderboard</button>
+		<div className={styles.container}>
+			<div>
+				<button onClick={showButton} className={styles.showButton}>Leaderboard</button>
 			</div>
 
-			<div className={`leaderboard ${showLeaderboard ? "shown" : "hidden"}`}>
+			<div className={`${styles.leaderboard} ${showLeaderboard ? styles.shown : styles.hidden}`}>
 				{leaderboard.map((user, index) => (
-					<div key={index}>
+					<div key={index} className={styles.player}>
 						<p>{user.username}</p>
 						<p>{user.time}s</p>
 					</div>

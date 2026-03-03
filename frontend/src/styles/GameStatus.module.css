@@ -1,0 +1,18 @@
+.gameStatus {
+    display: flex;
+    margin-bottom: 20px;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+}
+
+.characterList {
+    display: flex;
+    gap: 12px;
+}
+
+.characterImage {
+    width: 50px;
+    aspect-ratio: 1/1;
+    border-radius: 8px;
+}

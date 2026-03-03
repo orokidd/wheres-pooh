@@ -1,9 +1,9 @@
+import './styles/App.css'
 import React, { useEffect, useState } from "react"
 import type { Selection, Status } from "./utils/types"
 
 import Welcome from "./components/Welcome"
 import GameOver from "./components/GameOver"
-import Timer from "./components/Timer"
 import Header from "./components/Header"
 import GameStatus from "./components/GameStatus"
 import GameImage from "./components/GameImage"
@@ -112,9 +112,8 @@ function App() {
 
 	return (
 		<>
-			<Header />
-			<Timer time={time} />
-			<GameStatus status={gameStatus} />
+			<Header resetGame={resetGame}/>
+			<GameStatus status={gameStatus} time={time}/>
 			<GameImage imageClick={handleImageClick}>
 				<SelectionCard
 					viewSelectionCard={viewSelectionCard}
