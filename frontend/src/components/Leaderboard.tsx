@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { apiLoadLeaderboard } from "../utils/api"
 import styles from "../styles/Leaderboard.module.css"
 
@@ -10,6 +10,7 @@ type Leaderboard = {
 export default function Leaderboard() {
 	const [showLeaderboard, setShowLeaderboard] = useState<boolean>(false)
 	const [loading, setLoading] = useState<boolean>(true)
+	const leaderboardRef = useRef<HTMLDivElement>(null)
 	const [leaderboard, setLeaderboard] = useState<Leaderboard[]>([
 		{
 			username: "dono",
@@ -32,8 +33,24 @@ export default function Leaderboard() {
 		loadLeaderboard()
 	}, [])
 
+	useEffect(() => {
+		function handleClickOutside(e: MouseEvent) {
+			if (leaderboardRef.current && !leaderboardRef.current.contains(e.target as Node)) {
+				setShowLeaderboard(false)
+			}
+		}
+
+		if (showLeaderboard) {
+			document.addEventListener("mousedown", handleClickOutside)
+		}
+
+		return () => {
+			document.removeEventListener("mousedown", handleClickOutside)
+		}
+	}, [showLeaderboard, setShowLeaderboard])
+
 	return (
-		<div className={styles.container}>
+		<div className={styles.container} ref={leaderboardRef}>
 			<div>
 				<button onClick={showButton} className={styles.showButton}>
 					Leaderboard
