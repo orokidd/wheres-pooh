@@ -1,6 +1,8 @@
 export interface Selection {
   x: number
+  xPercent : number
   y: number
+  yPercent: number
   character: string
 }
 

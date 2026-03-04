@@ -26,7 +26,9 @@ function App() {
 
 	const [currentSelection, setCurrentSelection] = useState<Selection>({
 		x: 0,
+		xPercent: 0,
 		y: 0,
+		yPercent: 0,
 		character: "",
 	})
 
@@ -36,11 +38,16 @@ function App() {
 		const x = e.clientX - imageInfo.left
 		const y = e.clientY - imageInfo.top
 
+		const xPercent = Math.round((x / imageInfo.width) * 100);
+		const yPercent = Math.round((y / imageInfo.height) * 100);
+
 		setCurrentSelection((prev) => {
-			return { ...prev, x, y }
+			return { ...prev, x, xPercent, y, yPercent }
 		})
 
 		setViewSelectionCard(true)
+
+		console.log("X%:", xPercent, "Y%:", yPercent)
 	}
 
 	async function handleSelectionClick(e: React.MouseEvent) {

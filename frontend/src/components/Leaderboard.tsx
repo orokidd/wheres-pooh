@@ -1,6 +1,10 @@
 import { useEffect, useState, useRef } from "react"
 import { apiLoadLeaderboard } from "../utils/api"
 import styles from "../styles/Leaderboard.module.css"
+import formatTime from "../utils"
+
+import { Tailspin } from "ldrs/react"
+import "ldrs/react/Tailspin.css"
 
 type Leaderboard = {
 	username: string
@@ -8,13 +12,13 @@ type Leaderboard = {
 }
 
 export default function Leaderboard() {
+	const leaderboardRef = useRef<HTMLDivElement>(null)
 	const [showLeaderboard, setShowLeaderboard] = useState<boolean>(false)
 	const [loading, setLoading] = useState<boolean>(true)
-	const leaderboardRef = useRef<HTMLDivElement>(null)
 	const [leaderboard, setLeaderboard] = useState<Leaderboard[]>([
 		{
-			username: "dono",
-			time: 12,
+			username: "",
+			time: 0,
 		},
 	])
 
@@ -59,14 +63,24 @@ export default function Leaderboard() {
 
 			<div className={`${styles.leaderboard} ${showLeaderboard ? styles.shown : styles.hidden}`}>
 				{loading ? (
-					<p>loading...</p>
+					<div className={styles.loadingIcon}>
+						<Tailspin size="40" stroke="5" speed="0.9" color="white" />
+					</div>
 				) : (
-					leaderboard.map((user, index) => (
-						<div key={index} className={styles.player}>
-							<p>{user.username}</p>
-							<p>{user.time}s</p>
+					<div className="leaderboardContent">
+						<div className={styles.leaderboardHeader}>
+							<p>Rank</p>
+							<p>Name</p>
+							<p>Time</p>
 						</div>
-					))
+						{leaderboard.map((user, index) => (
+							<div key={index} className={styles.player}>
+								<p>{index + 1}</p>
+								<p>{user.username}</p>
+								<p>{formatTime(user.time)}</p>
+							</div>
+						))}
+					</div>
 				)}
 			</div>
 		</div>

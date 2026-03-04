@@ -15,60 +15,18 @@
     color: var(--fg);
 }
 
-.headerOptions svg {
-	cursor: pointer;
-	transition: all ease 0.3s;
-}
-
-.headerOptions svg:hover {
-	color: var(--accent);
-}
-
 .headerOptions button {
     cursor: pointer;
     transition: all ease 0.3s;
     color: var(--fg);
 }
 
+.headerOptions button:hover {
+    color: var(--accent);
+}
+
 .siteIcon img {
 	width: 40px;
 	height: 40px;
 	border-radius: 50%;
-}
-
-.userCard {
-	opacity: 0;
-	position: absolute;
-	top: 40px;
-	transform: translateY(-8px);
-
-	padding: 22px;
-	border-radius: 18px;
-	background-color: var(--bg-alt);
-	transition: all 0.3s ease;
-	pointer-events: none;
-}
-
-.active {
-	opacity: 1;
-	pointer-events: all;
-	transform: translateY(0px);
-}
-
-.logoutButton,
-.loginButton {
-	color: var(--gray);
-	cursor: pointer;
-	transition: all 0.3s ease;
-}
-
-.logoutButton:hover,
-.loginButton:hover {
-	color: var(--accent);
-}
-
-@media screen and (max-width: 600px) {
-	.userCard {
-		right: 0px;
-	}
 }

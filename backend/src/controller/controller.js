@@ -2,14 +2,14 @@ const prisma = require("../config/prisma");
 const API_KEY = process.env.API_KEY;
 
 const characters = {
-	Aladdin: { xMin: 782, xMax: 843, yMin: 342, yMax: 475 },
-	Zorro: { xMin: 70, xMax: 116, yMin: 1131, yMax: 1209 },
-	Rapunzel: { xMin: 13, xMax: 68, yMin: 618, yMax: 726 },
-	Pooh: { xMin: 1190, xMax: 1236, yMin: 800, yMax: 866 },
+	Aladdin: { xMin: 41, xMax: 44, yMin: 26, yMax: 37 },
+	Zorro: { xMin: 4, xMax: 6, yMin: 88, yMax: 94 },
+	Rapunzel: { xMin: 1, xMax: 4, yMin: 48, yMax: 57 },
+	Pooh: { xMin: 62, xMax: 65, yMin: 62, yMax: 68 },
 };
 
 function checkUserInput(req, res) {
-	const { x, y, character } = req.body;
+	const { xPercent, yPercent, character } = req.body;
 	const apiKey = req.headers['x-api-key'];
 
 	if (apiKey !== API_KEY) {
@@ -19,7 +19,7 @@ function checkUserInput(req, res) {
 	const target = characters[character];
 	if (!target) return res.status(400).json({ success: false, message: "Invalid character." });
 
-	const isFound = x >= target.xMin && x <= target.xMax && y >= target.yMin && y <= target.yMax;
+	const isFound = xPercent >= target.xMin && xPercent <= target.xMax && yPercent >= target.yMin && yPercent <= target.yMax;
 
 	res.json({ found: isFound });
 }

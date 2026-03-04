@@ -19,8 +19,14 @@ export default function GameStatus({ status, time }: { status: Status[]; time: n
 			<ul className={styles.characterList}>
 				{status.map((char) => (
 					<li key={char.name} style={{ textDecoration: char.found ? "line-through" : "none" }}>
-						<img src={characterImages[char.name as keyof typeof characterImages]} alt={char.name} className={styles.characterImage} />
-						{char.found ? "✓" : ""}
+						<img
+							src={characterImages[char.name as keyof typeof characterImages]}
+							alt={char.name}
+							className={styles.characterImage}
+							style={{
+								filter: `brightness(${char.found ? "50%" : "100%"})`,
+							}}
+						/>
 					</li>
 				))}
 			</ul>

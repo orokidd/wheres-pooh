@@ -30,7 +30,7 @@ export default function SelectionCard({ viewSelectionCard, currentSelection, set
 				<button
 					onClick={() => {
 						setViewSelectionCard(false)
-						setCurrentSelection({ x: 0, y: 0, character: "" })
+						setCurrentSelection({ x: 0, xPercent: 0, y: 0, yPercent:0, character: "" })
 					}}
 					style={{
 						border: "none",
