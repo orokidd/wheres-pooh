@@ -1,0 +1,67 @@
+.container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	height: 95vh;
+}
+
+.container h1,
+.container p {
+	text-align: center;
+}
+
+.gameName {
+	font-family: "jojoba", sans-serif;
+	font-size: 8rem;
+	color: var(--fg);
+}
+
+.gameDesc {
+	font-family: "jojoba", sans-serif;
+	font-size: 2rem;
+	color: var(--fg);
+}
+
+.startButton {
+	margin-top: 20px;
+	padding: 15px 25px;
+	font-size: 1.2rem;
+	color: var(--bg);
+	background-color: var(--accent);
+	border: none;
+	border-radius: 50px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	font-family: "jojoba", sans-serif;
+}
+
+.startButton:hover {
+	transform: scale(1.05) rotate(-2deg);
+}
+
+@media screen and (max-width: 600px) {
+	.gameName {
+		font-size: 4rem;
+	}
+
+	.gameDesc {
+		font-size: 1.2rem;
+	}
+}
+
+@media screen and (max-width: 400px) {
+	.gameName {
+		font-size: 3rem;
+	}
+
+	.gameDesc {
+		font-size: 1rem;
+	}
+
+	.startButton {
+		margin-top: 20px;
+		padding: 12px 20px;
+		font-size: 1rem;
+	}
+}

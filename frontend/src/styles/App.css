@@ -80,6 +80,16 @@ a {
 	src: url("../assets/Inter_variable.ttf") format("truetype");
 }
 
+@font-face {
+	font-family: majestic_island;
+	src: url("../assets/majestic_island.otf") format("opentype");
+}
+
+@font-face {
+	font-family: jojoba;
+	src: url("../assets/jojoba.otf") format("opentype");
+}
+
 body {
 	background-color: var(--bg);
 	color: var(--fg);

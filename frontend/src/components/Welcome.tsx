@@ -3,15 +3,18 @@ type WelcomeProps = {
 	setIsRunning: React.Dispatch<React.SetStateAction<boolean>>
 }
 
+import styles from "../styles/Welcome.module.css"
+
 export default function Welcome({ setWelcomePage, setIsRunning }: WelcomeProps) {
 	return (
-		<div className="welcome">
+		<div className={styles.container}>
 			<section className="game-instruction">
-				<h1>Where's Pooh?</h1>
-				<p>In order to finish the game, you have to find Winnie the Pooh and all his friends.</p>
+				<h1 className={styles.gameName}>Where's Pooh?</h1>
+				<p className={styles.gameDesc}>Find Winnie the Pooh and his friends!</p>
 			</section>
-            
+
 			<button
+				className={styles.startButton}
 				onClick={() => {
 					setWelcomePage(false)
 					setIsRunning(true)

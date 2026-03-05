@@ -8,6 +8,7 @@ import Header from "./components/Header"
 import GameStatus from "./components/GameStatus"
 import GameImage from "./components/GameImage"
 import SelectionCard from "./components/SelectionCard"
+import Footer from './components/Footer'
 import { apiCheckSelection } from "./utils/api"
 
 const CHARACTERS = ["Aladdin", "Zorro", "Rapunzel", "Pooh"]
@@ -131,6 +132,7 @@ function App() {
 					handleSelectionClick={handleSelectionClick}
 				/>
 			</GameImage>
+			<Footer/>
 		</>
 	)
 }

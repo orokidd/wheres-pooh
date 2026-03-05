@@ -1,0 +1,4 @@
+- welcome page style
+- game over style
+- responsiveness
+- selection card style
