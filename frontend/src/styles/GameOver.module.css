@@ -1,0 +1,101 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.9);
+    animation: fadeIn 0.3s forwards;
+}
+
+.box {
+    background-color: var(--bg-alt);
+    padding: 40px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 450px;
+    transform: translateY(100%);
+    animation: slideIn 0.5s forwards;
+}
+
+.text {
+    font-family: "jojoba", sans-serif;
+    font-size: 2rem;
+    color: var(--fg);
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.inputContainer {
+    width: 100%;
+}
+
+.usernameInput {
+    padding: 8px 18px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 24px;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.usernameInput:focus {
+    outline: none;
+}
+
+.buttonGroup {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.submitButton, .restartButton {
+    padding: 10px 20px;
+    font-size: 1rem;
+    color: var(--bg);
+    background-color: var(--accent);
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.submitButton {
+    background-color: var(--accent);
+}
+
+.restartButton {
+    background-color: var(--gray);
+}
+
+.submitButton:hover, .restartButton:hover {
+    filter: brightness(0.8);
+}
+
+@keyframes slideIn {
+    to {
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .box {
+        width: 90%;
+    }
+}

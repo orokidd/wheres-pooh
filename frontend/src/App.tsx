@@ -116,7 +116,7 @@ function App() {
 
 	if (welcomePage === true) return <Welcome setWelcomePage={setWelcomePage} setIsRunning={setIsRunning} />
 
-	if (gameOver === true) return <GameOver time={time} resetGame={resetGame} />
+	// if (gameOver === true) return <GameOver time={time} resetGame={resetGame} />
 
 	return (
 		<>
@@ -133,6 +133,8 @@ function App() {
 				/>
 			</GameImage>
 			<Footer/>
+
+			<GameOver gameOver={gameOver} time={time} resetGame={resetGame}/>
 		</>
 	)
 }

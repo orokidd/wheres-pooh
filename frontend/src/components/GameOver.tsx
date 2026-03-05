@@ -2,13 +2,15 @@ import { useState } from "react"
 import formatTime from "../utils"
 import { apiSubmitScore } from "../utils/api"
 import type { TimeResult } from "../utils/types"
+import styles from "../styles/GameOver.module.css"
 
 type GameOverProps = {
+	gameOver: boolean
 	time: number
 	resetGame: () => void
 }
 
-export default function GameOver({ time, resetGame }: GameOverProps) {
+export default function GameOver({ gameOver, time, resetGame }: GameOverProps) {
 	const [username, setUsername] = useState<string>("")
 	const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
@@ -42,23 +44,29 @@ export default function GameOver({ time, resetGame }: GameOverProps) {
 	}
 
 	return (
-		<div className="game-over">
-			<div className="text">
-				<p>Game Over</p>
-				<p>You have found all the characters!</p>
-				<p className="final-time">Your time: {formatTime(time)}</p>
-			</div>
+		<div
+			className={styles.container}
+			style={{
+				display: gameOver ? "flex" : "none",
+			}}>
+			<div className={styles.box}>
+				<div className={styles.text}>
+					<p>Game Over</p>
+					<p className="final-time">Time: {formatTime(time)}</p>
+				</div>
 
-			<div className="username-input">
-				<p>Enter your username to save your score</p>
-				<input type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username" disabled={isSubmitting} />
-				<button onClick={handleSubmitScore} disabled={isSubmitting || !username.trim()}>
-					{isSubmitting ? "Submitting..." : "Submit Score"}
-				</button>
-                
-				<button onClick={resetGame} style={{ marginLeft: "10px" }}>
-					Play Again
-				</button>
+				<div className={styles.inputContainer}>
+					<input type="text" className={styles.usernameInput} value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Enter username" disabled={isSubmitting} />
+					<div className={styles.buttonGroup}>
+						<button className={styles.restartButton} onClick={resetGame} style={{ marginLeft: "10px" }}>
+							Restart
+						</button>
+
+						<button className={styles.submitButton} onClick={handleSubmitScore} disabled={isSubmitting || !username.trim()}>
+							Submit
+						</button>
+					</div>
+				</div>
 			</div>
 		</div>
 	)
