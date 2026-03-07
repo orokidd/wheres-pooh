@@ -1,4 +1,3 @@
-- welcome page style
-- game over style
 - responsiveness
 - selection card style
+- game over behavior (score submitted/failed)

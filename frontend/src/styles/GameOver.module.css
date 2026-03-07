@@ -79,6 +79,16 @@
     filter: brightness(0.8);
 }
 
+.submitButton:disabled {
+    /* background-color: var(--gray); */
+    cursor: not-allowed;
+}
+
+
+.sucess {
+    font-size: 1.2rem;
+}
+
 @keyframes slideIn {
     to {
         transform: translateY(0);

@@ -1,4 +1,5 @@
 import type { Selection, Status } from "../utils/types"
+import styles from "../styles/SelectionCard.module.css"
 
 type Props = {
 	viewSelectionCard: boolean
@@ -14,31 +15,18 @@ export default function SelectionCard({ viewSelectionCard, currentSelection, set
 
 	return (
 		<div
-			className="character-selection" // Fixed spelling
+			className={styles.selectionContainer} // Fixed spelling
 			style={{
-				position: "absolute",
 				left: currentSelection.x,
 				top: currentSelection.y,
-				backgroundColor: "white",
-				border: "1px solid black",
-				padding: "10px",
-				zIndex: 1000,
-				borderRadius: "5px",
-				boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
 			}}>
-			<div className="close-btn" style={{ textAlign: "right" }}>
+			<div className="close-btn">
 				<button
 					onClick={() => {
 						setViewSelectionCard(false)
-						setCurrentSelection({ x: 0, xPercent: 0, y: 0, yPercent:0, character: "" })
+						setCurrentSelection({ x: 0, xPercent: 0, y: 0, yPercent: 0, character: "" })
 					}}
-					style={{
-						border: "none",
-						background: "none",
-						cursor: "pointer",
-						fontSize: "16px",
-						fontWeight: "bold",
-					}}>
+					className={styles.closeButton}>
 					✕
 				</button>
 			</div>
@@ -50,16 +38,10 @@ export default function SelectionCard({ viewSelectionCard, currentSelection, set
 						onClick={handleSelectionClick}
 						key={char.name}
 						disabled={char.found}
+						className={styles.selectionButton}
 						style={{
-							display: "block",
-							width: "100%",
-							margin: "5px 0",
-							padding: "5px",
 							cursor: char.found ? "not-allowed" : "pointer",
 							opacity: char.found ? 0.5 : 1,
-							backgroundColor: "#f0f0f0",
-							border: "1px solid #ccc",
-							borderRadius: "3px",
 						}}>
 						{char.name}
 					</button>

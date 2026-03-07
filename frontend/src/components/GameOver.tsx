@@ -13,6 +13,8 @@ type GameOverProps = {
 export default function GameOver({ gameOver, time, resetGame }: GameOverProps) {
 	const [username, setUsername] = useState<string>("")
 	const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
+	const [submitted, setSubmitted] = useState<boolean>(false)
+	const [error, setError] = useState<boolean>(false)
 
 	async function handleSubmitScore() {
 		if (!username.trim()) {
@@ -34,13 +36,27 @@ export default function GameOver({ gameOver, time, resetGame }: GameOverProps) {
 				throw new Error("Failed to submit score")
 			}
 
-			alert("Score submitted successfully!")
+			setSubmitted(true)
 		} catch (error) {
 			console.error("Error submitting score:", error)
-			alert("Failed to submit score. Please try again.")
+			setError(true)
 		} finally {
 			setIsSubmitting(false)
 		}
+	}
+
+	function submitButton() {
+		if (!submitted)
+			return (
+				<button className={styles.submitButton} onClick={handleSubmitScore} disabled={isSubmitting || !username.trim()}>
+					Submit
+				</button>
+			)
+	}
+
+	function usernameInput() {
+		if (!submitted)
+			return <input type="text" className={styles.usernameInput} value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Enter username" disabled={isSubmitting} required />
 	}
 
 	return (
@@ -53,18 +69,27 @@ export default function GameOver({ gameOver, time, resetGame }: GameOverProps) {
 				<div className={styles.text}>
 					<p>Game Over</p>
 					<p className="final-time">Time: {formatTime(time)}</p>
+					{error ? (
+						<div className="error">
+							<p>Failed to submit score. Please try again.</p>
+						</div>
+					) : null}
+
+					{submitted ? (
+						<div className={styles.sucess}>
+							<p>Your score has been sent successfully.</p>
+						</div>
+					) : null}
 				</div>
 
 				<div className={styles.inputContainer}>
-					<input type="text" className={styles.usernameInput} value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Enter username" disabled={isSubmitting} />
+					{usernameInput()}
 					<div className={styles.buttonGroup}>
 						<button className={styles.restartButton} onClick={resetGame} style={{ marginLeft: "10px" }}>
 							Restart
 						</button>
 
-						<button className={styles.submitButton} onClick={handleSubmitScore} disabled={isSubmitting || !username.trim()}>
-							Submit
-						</button>
+						{submitButton()}
 					</div>
 				</div>
 			</div>

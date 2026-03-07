@@ -84,7 +84,7 @@ function App() {
 		setGameStatus((prev) => prev.map((char) => ({ ...char, found: false })))
 		setTime(0)
 		setGameOver(false)
-		setWelcomePage(true)
+		setIsRunning(true)
 	}
 
 	// increment every 1000ms
