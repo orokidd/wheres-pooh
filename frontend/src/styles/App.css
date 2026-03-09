@@ -77,17 +77,17 @@ a {
 
 @font-face {
 	font-family: inter;
-	src: url("../../public/Inter_variable.ttf") format("truetype");
+	src: url("/public/Inter_variable.ttf") format("truetype");
 }
 
 @font-face {
 	font-family: majestic_island;
-	src: url("../../public/majestic_island.otf") format("opentype");
+	src: url("/public/majestic_island.otf") format("opentype");
 }
 
 @font-face {
 	font-family: jojoba;
-	src: url("../../public/jojoba.otf") format("opentype");
+	src: url("/public/jojoba.otf") format("opentype");
 }
 
 body {
