@@ -87,7 +87,7 @@ a {
 
 @font-face {
 	font-family: jojoba;
-	src: url("/public/jojoba.otf") format("opentype");
+	src: url("/public/Jojoba.otf") format("opentype");
 }
 
 body {
