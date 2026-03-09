@@ -87,6 +87,14 @@ function App() {
 		setIsRunning(true)
 	}
 
+	function returnHome() {
+		setGameStatus((prev) => prev.map((char) => ({ ...char, found: false })))
+		setTime(0)
+		setGameOver(false)
+		setIsRunning(false)
+		setWelcomePage(true)
+	}
+
 	// increment every 1000ms
 	useEffect(() => {
 		let intervalId: number | undefined
@@ -120,7 +128,7 @@ function App() {
 
 	return (
 		<>
-			<Header resetGame={resetGame}/>
+			<Header returnHome={returnHome}/>
 			<GameStatus status={gameStatus} time={time}/>
 			<GameImage imageClick={handleImageClick}>
 				<SelectionCard

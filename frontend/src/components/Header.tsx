@@ -3,7 +3,7 @@ import siteLogo from "../assets/site-icon.jpeg"
 import Leaderboard from "../components/Leaderboard"
 import styles from "../styles/Header.module.css"
 
-export default function Header({resetGame} : {resetGame: () => void}) {
+export default function Header({returnHome} : {returnHome: () => void}) {
 	return (
 		<header className={styles.header}>
 			<div className={styles.siteIcon}>
@@ -13,7 +13,7 @@ export default function Header({resetGame} : {resetGame: () => void}) {
 			</div>
 
 			<div className={styles.headerOptions}>
-				<button onClick={resetGame}>Home</button>
+				<button onClick={returnHome}>Home</button>
 				<Leaderboard />
 			</div>
 		</header>
